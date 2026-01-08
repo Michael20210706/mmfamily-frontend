@@ -1,5 +1,5 @@
 // API基础配置
-export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
+export const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || '/api';
 
 // 用户相关API
 export const USER_API = {
@@ -35,4 +35,3 @@ export const PERMISSION_API = {
   updatePermission: (id: string) => `${API_BASE_URL}/permissions/${id}`,
   deletePermission: (id: string) => `${API_BASE_URL}/permissions/${id}`,
 };
-

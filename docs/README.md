@@ -4,13 +4,16 @@
 
 - 概览（Overview）
   - [项目概述](./overview/PROJECT_SUMMARY.md)
+  - [前端概述](./overview/FRONTEND_SUMMARY.md)
 
 - 安装与配置（Setup）
   - [快速开始](./setup/QUICK_START.md)
   - [后端搭建](./setup/BACKEND_SETUP.md)
+  - [Vite 迁移说明](./setup/VITE_MIGRATION.md)
 
 - 架构（Architecture）
   - [系统架构](./architecture/ARCHITECTURE.md)
+  - [前端架构说明](./architecture/FRONTEND_ARCHITECTURE.md)
 
 - 部署（Deployment）
   - [部署指南](./deployment/DEPLOYMENT.md)
@@ -22,4 +25,3 @@
 - 新文档请优先放入对应分类目录；无法归类时可先放在 docs/ 根目录并在后续整理。
 - 文件命名：使用全大写下划线或 kebab-case，保持与现有风格一致。
 - 如需新增分类，请在本页同步更新目录。
-
