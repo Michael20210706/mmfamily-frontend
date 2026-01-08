@@ -1,0 +1,16 @@
+.sidebar {
+  height: 100vh;
+  overflow-y: auto;
+  background-color: #fff;
+  border-right: 1px solid #f0f0f0;
+  padding: 24px 0;
+}
+
+.sidebar :global(.ant-menu) {
+  background-color: transparent;
+}
+
+.sidebar :global(.ant-menu-item) {
+  margin-bottom: 8px;
+}
+
