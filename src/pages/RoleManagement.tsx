@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Card,
   Table,
@@ -36,12 +36,7 @@ const RoleManagement: React.FC = () => {
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
   const [pagination, setPagination] = useState({ page: 1, pageSize: 10, total: 0 });
 
-  useEffect(() => {
-    fetchRoles();
-    fetchPermissions();
-  }, [pagination.page, pagination.pageSize]);
-
-  const fetchRoles = async () => {
+  const fetchRoles = useCallback(async () => {
     try {
       setLoading(true);
       const response = await httpClient.get(ROLE_API.getRoleList, {
@@ -51,26 +46,31 @@ const RoleManagement: React.FC = () => {
         },
       });
       setRoles(response.data.data || []);
-      setPagination({
-        ...pagination,
+      setPagination((prev) => ({
+        ...prev,
         total: response.data.total || 0,
-      });
+      }));
     } catch (error) {
       message.error('获取角色列表失败');
       console.error(error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.page, pagination.pageSize]);
 
-  const fetchPermissions = async () => {
+  const fetchPermissions = useCallback(async () => {
     try {
       const response = await httpClient.get(PERMISSION_API.getPermissionList);
       setPermissions(response.data.data || []);
     } catch (error) {
       console.error('获取权限列表失败:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchRoles();
+    fetchPermissions();
+  }, [fetchRoles, fetchPermissions]);
 
   const handleAddRole = () => {
     setEditingRole(null);
@@ -194,7 +194,7 @@ const RoleManagement: React.FC = () => {
     {
       title: '操作',
       key: 'action',
-      render: (_, record: Role) => (
+      render: (_: any, record: Role) => (
         <Space size="middle">
           <Button
             type="primary"
@@ -305,9 +305,10 @@ const RoleManagement: React.FC = () => {
             defaultExpandedKeys={permissions.map((p) => `resource-${p.resource}`)}
             treeData={buildPermissionTree()}
             checkedKeys={selectedPermissions}
-            onCheck={(checkedKeys) => {
+            onCheck={(checkedKeys: any) => {
+              const keys = Array.isArray(checkedKeys) ? checkedKeys : checkedKeys.checked;
               setSelectedPermissions(
-                checkedKeys.filter((key) => !String(key).startsWith('resource-')) as string[]
+                keys.filter((key: any) => !String(key).startsWith('resource-')) as string[]
               );
             }}
           />

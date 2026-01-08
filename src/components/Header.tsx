@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Dropdown, Avatar, Space } from 'antd';
+import { Dropdown, Avatar, Space } from 'antd';
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -14,14 +14,14 @@ const Header: React.FC = () => {
     navigate('/login');
   };
 
-  const menuItems = [
+  const menuItems: any[] = [
     {
       key: 'profile',
       label: '个人资料',
       icon: <UserOutlined />,
     },
     {
-      type: 'divider',
+      type: 'divider' as const,
     },
     {
       key: 'logout',

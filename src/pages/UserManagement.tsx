@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Card,
   Table,
@@ -11,8 +11,6 @@ import {
   Tag,
   Popconfirm,
   message,
-  Row,
-  Col,
 } from 'antd';
 import {
   PlusOutlined,
@@ -34,12 +32,7 @@ const UserManagement: React.FC = () => {
   const [form] = Form.useForm();
   const [pagination, setPagination] = useState({ page: 1, pageSize: 10, total: 0 });
 
-  useEffect(() => {
-    fetchUsers();
-    fetchRoles();
-  }, [pagination.page, pagination.pageSize]);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
       const response = await httpClient.get(USER_API.getUserList, {
@@ -49,26 +42,31 @@ const UserManagement: React.FC = () => {
         },
       });
       setUsers(response.data.data || []);
-      setPagination({
-        ...pagination,
+      setPagination((prev) => ({
+        ...prev,
         total: response.data.total || 0,
-      });
+      }));
     } catch (error) {
       message.error('获取用户列表失败');
       console.error(error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.page, pagination.pageSize]);
 
-  const fetchRoles = async () => {
+  const fetchRoles = useCallback(async () => {
     try {
       const response = await httpClient.get(ROLE_API.getRoleList);
       setRoles(response.data.data || []);
     } catch (error) {
       console.error('获取角色列表失败:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchUsers();
+    fetchRoles();
+  }, [fetchUsers, fetchRoles]);
 
   const handleAddUser = () => {
     setEditingUser(null);
@@ -174,7 +172,7 @@ const UserManagement: React.FC = () => {
     {
       title: '操作',
       key: 'action',
-      render: (_, record: User) => (
+      render: (_: any, record: User) => (
         <Space size="middle">
           <Button
             type="primary"

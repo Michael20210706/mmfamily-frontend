@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Card,
   Table,
@@ -52,11 +52,7 @@ const PermissionManagement: React.FC = () => {
   const [form] = Form.useForm();
   const [pagination, setPagination] = useState({ page: 1, pageSize: 10, total: 0 });
 
-  useEffect(() => {
-    fetchPermissions();
-  }, [pagination.page, pagination.pageSize]);
-
-  const fetchPermissions = async () => {
+  const fetchPermissions = useCallback(async () => {
     try {
       setLoading(true);
       const response = await httpClient.get(PERMISSION_API.getPermissionList, {
@@ -66,17 +62,21 @@ const PermissionManagement: React.FC = () => {
         },
       });
       setPermissions(response.data.data || []);
-      setPagination({
-        ...pagination,
+      setPagination((prev) => ({
+        ...prev,
         total: response.data.total || 0,
-      });
+      }));
     } catch (error) {
       message.error('获取权限列表失败');
       console.error(error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.page, pagination.pageSize]);
+
+  useEffect(() => {
+    fetchPermissions();
+  }, [fetchPermissions]);
 
   const handleAddPermission = () => {
     setEditingPermission(null);
@@ -176,7 +176,7 @@ const PermissionManagement: React.FC = () => {
     {
       title: '操作',
       key: 'action',
-      render: (_, record: Permission) => (
+      render: (_: any, record: Permission) => (
         <Space size="middle">
           <Button
             type="primary"

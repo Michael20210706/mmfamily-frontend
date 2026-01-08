@@ -14,7 +14,7 @@ import './App.css';
 function App() {
   return (
     <ConfigProvider locale={zhCN}>
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <AuthProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
@@ -42,4 +42,3 @@ function App() {
 }
 
 export default App;
-
