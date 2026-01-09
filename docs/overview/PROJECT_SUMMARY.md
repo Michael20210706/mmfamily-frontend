@@ -308,3 +308,9 @@ HTML文件：       1个
 
 **祝您使用愉快！** 🚀
 
+# 项目概述（更新）
+
+本文件概述项目的目标与模块。更多前端细节请参考：
+
+- [前端概览（FRONTEND_SUMMARY）](./FRONTEND_SUMMARY.md)
+- [前端整体架构说明（FRONTEND_ARCHITECTURE）](../architecture/FRONTEND_ARCHITECTURE.md)
